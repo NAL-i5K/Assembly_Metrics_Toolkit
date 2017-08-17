@@ -50,16 +50,17 @@ def process_assemblathon_stats(stdout, type='split-scaffolds'):
         if len(temp):
             result[temp[0]] = ' '.join(temp[1:])
     if type == 'split-scaffolds':
-        #selected_features = []
-        pass
+        keys = list(result.keys())
+        for k in keys:
+            if 'contigs' in k or 'Contigs' in k or 'contig' in k or 'Contig' in k:
+                result [ k+ ' (split contigs)' ] = result[k]
+                del result[k]
     elif type == 'scaffolds-only':
-        #selected_features = []
         keys = list(result.keys())
         for k in keys:
             if 'contigs' in k or 'Contigs' in k or 'contig' in k or 'Contig' in k or 'N50' in k or 'L50' in k:
                 del result[k]
     else: # type == 'contigs-only'
-        # selected_features = []
         keys = list(result.keys())
         for k in keys:
             if 'scaffolds' in k or 'Scaffolds' in k or 'scaffold' in k or 'Scaffold' in k or 'N50' in k or 'L50' in k:
@@ -76,15 +77,11 @@ def process_quast_result(temp_path, only_scaffolds=False):
             values = f.readline().rstrip('\n').split('\t')[1:]
             for h, v in zip(header, values):
                 if h in selected_features:
-                    result[h] = v
+                    result[h + ' (scaffolds)'] = v
             values = f.readline().rstrip('\n').split('\t')[1:]
             for h, v in zip(header, values):
                 if h in selected_features:
                     result[h + ' (split contigs)'] = v
-            #removed_features = set(result['original'].keys()) - selected_features
-            #for r in removed_features:
-            #    del result['original'][r]
-            #    del result['split'][r]
     else:
         with open(os.path.join(temp_path, 'transposed_report.tsv')) as f:
             header = f.readline()
@@ -99,26 +96,192 @@ def process_quast_result(temp_path, only_scaffolds=False):
             for h, v in zip(header, values):
                 if h in selected_features:
                     result[h + ' (contigs)'] = v
-        #removed_features = set(result.keys()) - selected_features
-        #for r in removed_features:
-        #    del result[r]
     return result
 
-def print_result(scaffolds_file, contigs_file, result):
-    if contigs_file is None:
-        order = ['Total length (>= 1000 bp)', 'Total length (>= 10000 bp)','Total length (>= 100000 bp)', 'Total length (>= 1000000 bp)', 'Total length (>= 10000000 bp)',
-                 'GC (%)', 'N50', 'N75', 'L50', 'L75', "# N's per 100 kbp"]
-        order =  order + [ o + ' (split contigs)' for o in order]
-        # TODO
-    else:
-        order = ['Total length (>= 1000 bp)', 'Total length (>= 10000 bp)','Total length (>= 100000 bp)', 'Total length (>= 1000000 bp)', 'Total length (>= 10000000 bp)',
-                  'GC (%)', 'N50', 'N75', 'L50', 'L75', "# N's per 100 kbp"]
-        order = [ o + ' (scaffolds)' for o in order] + [ o + ' (contigs)' for o in order]
+def post_process_result(scaffolds_file, contigs_file, result):
+    rename = {
+            'GC (%) (split contigs)': 'GC content of split contigs (%)',
+            'N50 (split contigs)': 'N50 of split contigs',
+            'N75 (split contigs)': 'N75 of split contgis',
+            'L50 (split contigs)': 'L50 of split contgis',
+            'L75 (split contigs)': 'L75 of split contgis',
+            "# N's per 100 kbp (split contigs)": 'Number of N per 100k nt of split contigs',
+            'GC (%) (contigs)': 'GC contnet of contigs (%)',
+            'N50 (contigs)': 'N50 of contigs',
+            'N75 (contigs)': 'N75 of contigs',
+            'L50 (contigs)': 'L50 of contigs',
+            'L75 (contigs)': 'L75 of contigs',
+            "# N's per 100 kbp (contigs)": 'Number of N per 100k nt of contigs',
+            'GC (%) (scaffolds)': 'GC contnet of scaffolds (%)',
+            'N50 (scaffolds)': 'N50 of scaffolds',
+            'N75 (scaffolds)': 'N75 of scaffolds',
+            'L50 (scaffolds)': 'L50 of scaffolds',
+            'L75 (scaffolds)': 'L75 of scaffolds',
+            "# N's per 100 kbp (scaffolds)": 'Number of N per 100k nt of scaffolds',
+            'Total length (>= 1000 bp) (split contigs)': 'Total length of split contigs (>= 1k nt)',
+            'Total length (>= 10000 bp) (split contigs)': 'Total length of split contigs (>= 10k nt)',
+            'Total length (>= 100000 bp) (split contigs)': 'Total length of split contigs (>= 100k nt)',
+            'Total length (>= 1000000 bp) (split contigs)': 'Total length of split contigs (>= 1M nt)',
+            'Total length (>= 10000000 bp) (split contigs)': 'Total length of split contigs (>= 10M nt)',
+            'Total length (>= 1000 bp) (contigs)': 'Total length of contigs (>= 1k nt)',
+            'Total length (>= 10000 bp) (contigs)': 'Total length of contigs (>= 10k nt)',
+            'Total length (>= 100000 bp) (contigs)': 'Total length of contigs (>= 100k nt)',
+            'Total length (>= 1000000 bp) (contigs)': 'Total length of contigs (>= 1M nt)',
+            'Total length (>= 10000000 bp) (contigs)': 'Total length of contigs (>= 10M nt)',
+            'Total length (>= 1000 bp) (scaffolds)': 'Total length of scaffolds (>= 1k nt)',
+            'Total length (>= 10000 bp) (scaffolds)': 'Total length of scaffolds (>= 10k nt)',
+            'Total length (>= 100000 bp) (scaffolds)': 'Total length of scaffolds (>= 100k nt)',
+            'Total length (>= 1000000 bp) (scaffolds)': 'Total length of scaffolds (>= 1M nt)',
+            'Total length (>= 10000000 bp) (scaffolds)': 'Total length of scaffolds (>= 10M nt)',
+            'Number of scaffolds > 1K nt': 'Number of scaffolds (>= 1k nt)',
+            'Number of scaffolds > 10K nt': 'Number of scaffolds (>= 10k nt)',
+            'Number of scaffolds > 100K nt': 'Number of scaffolds (>= 100k nt)',
+            'Number of scaffolds > 1M nt': 'Number of scaffolds (>= 1M nt)',
+            'Number of scaffolds > 10M nt': 'Number of scaffolds (> 10M nt)',
+            'scaffold %A': 'Scaffold A (%)',
+            'scaffold %C': 'Scaffold C (%)',
+            'scaffold %G': 'Scaffold G (%)',
+            'scaffold %T': 'Scaffold T (%)',
+            'scaffold %N': 'Scaffold N (%)',
+            'scaffold %non-ACGTN': 'Scaffold non-ACGTN (%)',
+            'Number of scaffold non-ACGTN nt': 'Number of scaffold non-ACGTN nt',
+            'Number of contigs > 1K nt': 'Number of contigs (>= 1k nt)',
+            'Number of contigs > 10K nt': 'Number of contigs (>= 10k nt)',
+            'Number of contigs > 100K nt': 'Number of contigs (>= 100k nt)',
+            'Number of contigs > 1M nt': 'Number of contigs (>= 1M nt)',
+            'Number of contigs > 10M nt': 'Number of contigs (>= 10M nt)',
+            'contig %A': 'Contig A (%)',
+            'contig %C': 'Contig C (%)',
+            'contig %G': 'Contig G (%)',
+            'contig %T': 'Contig T (%)',
+            'contig %N': 'Contig N (%)',
+            'contig %non-ACGTN': 'Contig non-ACGTN (%)',
+            'Number of contig non-ACGTN nt': 'Number of contig non-ACGTN nt',
+            'Number of contigs (split contigs)': 'Number of split contigs',
+            'Total size of contigs (split contigs)': 'Total size of split contigs',
+            'Longest contig (split contigs)': 'Longest split contig',
+            'Shortest contig (split contigs)': 'Shortest split contig',
+            'Number of contigs > 1K nt (split contigs)': 'Number of split contigs (>= 1k nt)',
+            'Number of contigs > 10K nt (split contigs)': 'Number of split contigs (>= 10k nt)',
+            'Number of contigs > 100K nt (split contigs)': 'Number of split contigs (>= 100k nt)',
+            'Number of contigs > 1M nt (split contigs)': 'Number of split contigs (>= 1M nt)',
+            'Number of contigs > 10M nt (split contigs)': 'Number of split contigs (>= 10M nt)',
+            'Mean contig size (split contigs)': 'Mean split contig size',
+            'Median contig size (split contigs)': 'Median split contig size',
+            'contig %A (split contigs)': 'Split contig A (%)',
+            'contig %C (split contigs)': 'Split contig C (%)',
+            'contig %G (split contigs)': 'Split contig G (%)',
+            'contig %T (split contigs)': 'Split contig T (%)',
+            'contig %N (split contigs)': 'Split contig N (%)',
+            'contig %non-ACGTN (split contigs)': 'Split contig non-ACGTN (%)',
+            'Number of contig non-ACGTN nt (split contigs)': 'Number of split contig non-ACGTN nt'
+    }
+    # TODO: rename the result
+    keys = list(result.keys())
+    for key in keys:
+        if key in rename:
+            result[rename[key]] = result[key]
+            del result[key]
+    # TODO: finished the order
+    order = [
+            # scaffolds
+            'Number of scaffolds',
+            'Total size of scaffolds',
+            'Longest scaffold',
+            'Shortest scaffold',
+            'Number of scaffolds (>= 1k nt)',
+            'Number of scaffolds (>= 10k nt)',
+            'Number of scaffolds (>= 100k nt)',
+            'Number of scaffolds (>= 1M nt)',
+            'Number of scaffolds (>= 10M nt)',
+            'Total length of scaffolds (>= 1k nt)',
+            'Total length of scaffolds (>= 10k nt)',
+            'Total length of scaffolds (>= 100k nt)',
+            'Total length of scaffolds (>= 1M nt)',
+            'Total length of scaffolds (>= 10M nt)',
+            'Mean scaffold size',
+            'Median scaffold size',
+            'Scaffold A (%)',
+            'Scaffold C (%)',
+            'Scaffold G (%)',
+            'Scaffold T (%)',
+            'Scaffold N (%)',
+            'Scaffold non-ACGTN (%)',
+            'Number of scaffold non-ACGTN nt',
+            'GC contnet of scaffolds (%)',
+            'N50 of scaffolds',
+            'N75 of scaffolds',
+            'L50 of scaffolds',
+            'L75 of scaffolds',
+            'Number of N per 100k nt of scaffolds',
+            # contigs
+            'Number of contigs',
+            'Total size of contigs',
+            'Longest contig',
+            'Shortest contig',
+            'Number of contigs (>= 1k nt)',
+            'Number of contigs (>= 10k nt)',
+            'Number of contigs (>= 100k nt)',
+            'Number of contigs (>= 1M nt)',
+            'Number of contigs (>= 10M nt)',
+            'Total length of contigs (>= 1k nt)',
+            'Total length of contigs (>= 10k nt)',
+            'Total length of contigs (>= 100k nt)',
+            'Total length of contigs (>= 1M nt)',
+            'Total length of contigs (>= 10M nt)',
+            'Mean contig size',
+            'Median contig size',
+            'Contig A (%)',
+            'Contig C (%)',
+            'Contig G (%)',
+            'Contig T (%)',
+            'Contig N (%)',
+            'Contig non-ACGTN (%)',
+            'Number of contig non-ACGTN nt'
+            'GC contnet of contigs (%)',
+            'N50 of contigs',
+            'N75 of contigs',
+            'L50 of contigs',
+            'L75 of contigs',
+            'Number of N per 100k nt of contigs',
+            # split contigs
+            'Number of split contigs',
+            'Total size of split contigs',
+            'Longest split contig',
+            'Shortest split contig',
+            'Number of split contigs (>= 1k nt)',
+            'Number of split contigs (>= 10k nt)',
+            'Number of split contigs (>= 100k nt)',
+            'Number of split contigs (>= 1M nt)',
+            'Number of split contigs (>= 10M nt)',
+            'Total length of split contigs (>= 1k nt)',
+            'Total length of split contigs (>= 10k nt)',
+            'Total length of split contigs (>= 100k nt)',
+            'Total length of split contigs (>= 1M nt)',
+            'Total length of split contigs (>= 10M nt)',
+            'Mean split contig size',
+            'Median split contig size',
+            'Split contig A (%)',
+            'Split contig C (%)',
+            'Split contig G (%)',
+            'Split contig T (%)',
+            'Split contig N (%)',
+            'Split contig non-ACGTN (%)',
+            'Number of split contig non-ACGTN nt'
+            'GC content of split contigs (%)',
+            'N50 of split contigs',
+            'N75 of split contgis',
+            'L50 of split contgis',
+            'L75 of split contgis',
+            'Number of N per 100k nt of split contigs',
+    ]
     for o in order:
-        print(o + ': ' + result[o])
+        if o in result:
+            print(o + ': ' + result[o])
+    return result
 
 if __name__ == '__main__':
     result_assemblathon = run_assemblathon_stats(args.scaffolds_file, args.contigs_file)
     result_quast = run_quast(args.scaffolds_file, args.contigs_file)
     result = {**result_assemblathon, **result_quast}
-    print_result(args.scaffolds_file, args.contigs_file, result)
+    result = post_process_result(args.scaffolds_file, args.contigs_file, result)
