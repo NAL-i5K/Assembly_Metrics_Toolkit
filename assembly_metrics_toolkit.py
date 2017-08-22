@@ -103,9 +103,9 @@ def post_process_result(scaffolds_file, contigs_file, result):
     rename = {
             'GC (%) (split contigs)': 'GC content of split contigs (%)',
             'N50 (split contigs)': 'N50 of split contigs',
-            'N75 (split contigs)': 'N75 of split contgis',
-            'L50 (split contigs)': 'L50 of split contgis',
-            'L75 (split contigs)': 'L75 of split contgis',
+            'N75 (split contigs)': 'N75 of split contigs',
+            'L50 (split contigs)': 'L50 of split contigs',
+            'L75 (split contigs)': 'L75 of split contigs',
             "# N's per 100 kbp (split contigs)": 'Number of N per 100k nt of split contigs',
             'GC (%) (contigs)': 'GC contnet of contigs (%)',
             'N50 (contigs)': 'N50 of contigs',
@@ -282,9 +282,9 @@ def post_process_result(scaffolds_file, contigs_file, result):
             'Number of split contig non-ACGTN nt'
             'GC content of split contigs (%)',
             'N50 of split contigs',
-            'N75 of split contgis',
-            'L50 of split contgis',
-            'L75 of split contgis',
+            'N75 of split contigs',
+            'L50 of split contigs',
+            'L75 of split contigs',
             'Number of N per 100k nt of split contigs',
     ]
     for o in order:
