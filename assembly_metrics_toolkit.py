@@ -4,10 +4,12 @@ import subprocess
 import os
 import shutil
 from itertools import islice
+import json
 
 parser = argparse.ArgumentParser(description='Calculate various assembly metrics')
 parser.add_argument('scaffolds_file', metavar='scaffolds_file', help='a fasta file of scaffolds (can be .gz)')
 parser.add_argument('contigs_file', metavar='contigs_file', help='a fasta file of contigs (can be .gz)', nargs='?')
+parser.add_argument('-o', metavar='output_path', help='where a JSON output file will be generated at', nargs=1)
 args = parser.parse_args()
 
 def run_assemblathon_stats(scaffolds_file, contigs_file=None):
@@ -40,7 +42,6 @@ def run_busco(scaffolds_file, contigs_file, ref_file):
     pass
 
 def process_assemblathon_stats(stdout, type='split-scaffolds'):
-    #selected_features = set(['Number of scaffolds', 'Total size of scaffolds', 'Longest scaffold', 'Shortest scaffold', 'Number of scaffolds > 1K nt', 'Number of scaffolds > 10K nt', 'Number of scaffolds > 100K nt', 'Number of scaffolds > 1M nt', 'Number of scaffolds > 10M nt', 'Mean scaffold size', 'Median scaffold size', 'scaffold %A', 'scaffold %C', 'scaffold %G', 'scaffold %T', 'scaffold %N', 'scaffold %non-ACGTN' ])
     lines = stdout.split('\n')
     result = {}
     for line in islice(lines, 4, None):
@@ -176,13 +177,11 @@ def post_process_result(scaffolds_file, contigs_file, result):
             'contig %non-ACGTN (split contigs)': 'Split contig non-ACGTN (%)',
             'Number of contig non-ACGTN nt (split contigs)': 'Number of split contig non-ACGTN nt'
     }
-    # TODO: rename the result
     keys = list(result.keys())
     for key in keys:
         if key in rename:
             result[rename[key]] = result[key]
             del result[key]
-    # TODO: finished the order
     order = [
             # scaffolds
             'Number of scaffolds',
@@ -285,3 +284,6 @@ if __name__ == '__main__':
     result_quast = run_quast(args.scaffolds_file, args.contigs_file)
     result = {**result_assemblathon, **result_quast}
     result = post_process_result(args.scaffolds_file, args.contigs_file, result)
+    if args.o:
+        with open(args.o[0], 'w') as f:
+            f.write(json.dumps(result, sort_keys=True, indent=4))
