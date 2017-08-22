@@ -182,6 +182,19 @@ def post_process_result(scaffolds_file, contigs_file, result):
         if key in rename:
             result[rename[key]] = result[key]
             del result[key]
+    remove = [
+            'Average length of break (>25 Ns) between contigs in scaffold (split contigs)',
+            'Average number of contigs per scaffold (split contigs)',
+            'L50 contig count (split contigs)',
+            'N50 contig length (split contigs)',
+            'Number of contigs in scaffolds (split contigs)',
+            'Number of contigs not in scaffolds (split contigs)',
+            'Percentage of assembly in scaffolded contigs (split contigs)',
+            'Percentage of assembly in unscaffolded contigs (split contigs)',
+    ]
+    for key in remove:
+        if key in result:
+            del result[key]
     order = [
             # scaffolds
             'Number of scaffolds',
