@@ -37,6 +37,11 @@ def run_quast(scaffolds_file, contigs_file=None):
         result = process_quast_result(temp_path, False)
     return result
 
+def run_asm2stats(scaffolds_file):
+    p = subprocess.run(['./asm2stats.minmaxgc.pl', scaffolds_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    result = json.loads(p.stdout)
+    return result
+
 def run_busco(scaffolds_file, contigs_file, ref_file):
     # TODO
     pass
@@ -295,8 +300,11 @@ def post_process_result(scaffolds_file, contigs_file, result):
 if __name__ == '__main__':
     result_assemblathon = run_assemblathon_stats(args.scaffolds_file, args.contigs_file)
     result_quast = run_quast(args.scaffolds_file, args.contigs_file)
-    result = {**result_assemblathon, **result_quast}
+    result_asm2stats = run_asm2stats(args.scaffolds_file)
+    result = {**result_assemblathon, **result_quast, **result_asm2stats}
     result = post_process_result(args.scaffolds_file, args.contigs_file, result)
     if args.o:
         with open(args.o[0], 'w') as f:
             f.write(json.dumps(result, sort_keys=True, indent=4))
+    
+
