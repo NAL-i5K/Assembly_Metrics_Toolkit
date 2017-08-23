@@ -34,7 +34,7 @@ GetOptions ("limit=i"       => \$limit,
 
 # set defaults
 $limit = 1000000000 if (!$limit);
-$n_limit = 25       if (!$n_limit);
+$n_limit = 10       if (!$n_limit);
 
 
 # check we have a suitable input file
