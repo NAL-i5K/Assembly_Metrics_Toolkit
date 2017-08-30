@@ -7,7 +7,7 @@
 
 ### Usage:
 ```
-usage: assembly_metrics_toolkit.py [-h] [-o output_path] scaffolds_file [contigs_file]
+usage: python3.5 assembly_metrics_toolkit.py [-h] [-o output_path] scaffolds_file [contigs_file]
 
 Calculate various assembly metrics
 
