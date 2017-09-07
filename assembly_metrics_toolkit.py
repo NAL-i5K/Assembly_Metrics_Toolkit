@@ -1,8 +1,6 @@
 #!/usr/bin/python3.5
 import argparse
 import subprocess
-import os
-import shutil
 from itertools import islice
 import json
 
@@ -32,7 +30,7 @@ def run_busco(scaffolds_file, contigs_file, ref_file):
     # TODO
     pass
 
-def process_assemblathon_stats(stdout, type='split-scaffolds'):
+def process_assemblathon_stats(stdout, kind='split-scaffolds'):
     lines = stdout.split('\n')
     result = {}
     for line in islice(lines, 4, None):
@@ -41,13 +39,13 @@ def process_assemblathon_stats(stdout, type='split-scaffolds'):
         temp = [ t.lstrip(' ') for t in temp ]
         if len(temp):
             result[temp[0]] = ' '.join(temp[1:])
-    if type == 'split-scaffolds':
+    if kind == 'split-scaffolds':
         keys = list(result.keys())
         for k in keys:
             if 'contigs' in k or 'Contigs' in k or 'contig' in k or 'Contig' in k:
                 result [ k+ ' (split contigs)' ] = result[k]
                 del result[k]
-    elif type == 'scaffolds-only':
+    elif kind == 'scaffolds-only':
         keys = list(result.keys())
         for k in keys:
             if 'contigs' in k or 'Contigs' in k or 'contig' in k or 'Contig' in k:
@@ -169,6 +167,5 @@ if __name__ == '__main__':
     result = post_process_result(args.scaffolds_file, args.contigs_file, result)
     if args.o:
         with open(args.o[0], 'w') as f:
-            f.write(json.dumps(result, sort_keys=True, indent=4))
-    
+            f.write(json.dumps(result, sort_keys=True, indent=4)) 
 
