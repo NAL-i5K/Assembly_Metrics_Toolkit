@@ -167,5 +167,4 @@ if __name__ == '__main__':
     result = post_process_result(args.scaffolds_file, args.contigs_file, result)
     if args.o:
         with open(args.o[0], 'w') as f:
-            f.write(json.dumps(result, sort_keys=True, indent=4)) 
-
+            f.write(json.dumps(result, sort_keys=True, indent=4))
