@@ -3,7 +3,6 @@
 ### Dependencies:
  * Perl
  * Python 3.5
- * [QUAST](https://github.com/ablab/quast) 4.5
 
 ### Usage:
 ```
