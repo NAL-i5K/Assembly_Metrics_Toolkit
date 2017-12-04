@@ -1,0 +1,19 @@
+Number of contigs: 45078
+Total size of contigs: 513619240
+Longest contig: 422438
+Shortest contig: 22
+Number of contigs (>= 1k nt): 40347 89.5%
+Number of contigs (>= 10k nt): 15160 33.6%
+Number of contigs (>= 100k nt): 184 0.4%
+Number of contigs (>= 1M nt): 0 0.0%
+Number of contigs (>= 10M nt): 0 0.0%
+Mean contig size: 11394
+Median contig size: 6023
+Contig A (%): 32.60
+Contig C (%): 17.40
+Contig G (%): 17.42
+Contig T (%): 32.58
+Contig N (%): 0.00
+Contig non-ACGTN (%): 0.00
+N50 of contigs: 23511
+L50 of contigs: 5962
