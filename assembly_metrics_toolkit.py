@@ -3,32 +3,46 @@ import argparse
 import subprocess
 from itertools import islice
 import json
+from sys import argv, exit
 
-parser = argparse.ArgumentParser(description='Calculate various assembly metrics')
-parser.add_argument('scaffolds_file', metavar='scaffolds_file', help='a fasta file of scaffolds (can be .gz)')
-parser.add_argument('contigs_file', metavar='contigs_file', help='a fasta file of contigs (can be .gz)', nargs='?')
-parser.add_argument('-o', metavar='output_path', help='where a JSON output file will be generated at', nargs=1)
-args = parser.parse_args()
 
-def run_assemblathon_stats(scaffolds_file, contigs_file=None):
-    p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
     if contigs_file is None:
+        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       universal_newlines=True)
         result = process_assemblathon_stats(p.stdout, 'scaffolds-only')
+    elif scaffolds_file is None:
+        p = subprocess.run(['./assemblathon_stats.pl', contigs_file],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       universal_newlines=True)
+        result = process_assemblathon_stats(p.stdout, 'contigs-only')
     else:
-        result_scaffolds = process_assemblathon_stats(p.stdout, 'scaffolds-only')
-        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       universal_newlines=True)
+        result_scaffolds = process_assemblathon_stats(p.stdout,
+                                                      'scaffolds-only')
+        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       universal_newlines=True)
         result_contigs = process_assemblathon_stats(p.stdout, 'contigs-only')
         result = {**result_scaffolds, **result_contigs}
     return result
 
+
 def run_asm2stats(scaffolds_file):
-    p = subprocess.run(['./asm2stats.minmaxgc.pl', scaffolds_file], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    p = subprocess.run(['./asm2stats.minmaxgc.pl', scaffolds_file],
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       universal_newlines=True)
     result = json.loads(p.stdout)
     return result
+
 
 def run_busco(scaffolds_file, contigs_file, ref_file):
     # TODO
     pass
+
 
 def process_assemblathon_stats(stdout, kind='split-scaffolds'):
     lines = stdout.split('\n')
@@ -43,7 +57,7 @@ def process_assemblathon_stats(stdout, kind='split-scaffolds'):
         keys = list(result.keys())
         for k in keys:
             if 'contigs' in k or 'Contigs' in k or 'contig' in k or 'Contig' in k:
-                result [ k+ ' (split contigs)' ] = result[k]
+                result[k + ' (split contigs)'] = result[k]
                 del result[k]
     elif kind == 'scaffolds-only':
         keys = list(result.keys())
@@ -56,6 +70,7 @@ def process_assemblathon_stats(stdout, kind='split-scaffolds'):
             if 'scaffolds' in k or 'Scaffolds' in k or 'scaffold' in k or 'Scaffold' in k:
                 del result[k]
     return result
+
 
 def post_process_result(scaffolds_file, contigs_file, result):
     rename = {
@@ -98,7 +113,7 @@ def post_process_result(scaffolds_file, contigs_file, result):
     for key in remove:
         if key in result:
             del result[key]
-    if 'GC content of scaffolds (%)' not in result:
+    if scaffolds_file is not None and 'GC content of scaffolds (%)' not in result:
         gc_ratio = float(result['Scaffold C (%)']) + float(result['Scaffold G (%)'])
         not_n_ratio = gc_ratio + float(result['Scaffold T (%)']) + float(result['Scaffold A (%)'])
         result['GC content of scaffolds (%)'] = str(round( gc_ratio / not_n_ratio * 100, 2))
@@ -106,30 +121,32 @@ def post_process_result(scaffolds_file, contigs_file, result):
         gc_ratio = float(result['Contig C (%)']) + float(result['Contig G (%)'])
         not_n_ratio = gc_ratio + float(result['Contig T (%)']) + float(result['Contig A (%)'])
         result['GC content of contigs (%)'] = str(round( gc_ratio / not_n_ratio * 100, 2))
-    order = [
-            # scaffolds
-            'Number of scaffolds',
-            'Total size of scaffolds',
-            'Longest scaffold',
-            'Shortest scaffold',
-            'Number of scaffolds (>= 1k nt)',
-            'Number of scaffolds (>= 10k nt)',
-            'Number of scaffolds (>= 100k nt)',
-            'Number of scaffolds (>= 1M nt)',
-            'Number of scaffolds (>= 10M nt)',
-            'Mean scaffold size',
-            'Median scaffold size',
-            'Scaffold A (%)',
-            'Scaffold C (%)',
-            'Scaffold G (%)',
-            'Scaffold T (%)',
-            'Scaffold N (%)',
-            'Scaffold non-ACGTN (%)',
-            'Number of scaffold non-ACGTN nt',
-            'GC content of scaffolds (%)',
-            'N50 of scaffolds',
-            'L50 of scaffolds',
-    ]
+    order = []
+    if scaffolds_file is not None:
+        order += [
+                # scaffolds
+                'Number of scaffolds',
+                'Total size of scaffolds',
+                'Longest scaffold',
+                'Shortest scaffold',
+                'Number of scaffolds (>= 1k nt)',
+                'Number of scaffolds (>= 10k nt)',
+                'Number of scaffolds (>= 100k nt)',
+                'Number of scaffolds (>= 1M nt)',
+                'Number of scaffolds (>= 10M nt)',
+                'Mean scaffold size',
+                'Median scaffold size',
+                'Scaffold A (%)',
+                'Scaffold C (%)',
+                'Scaffold G (%)',
+                'Scaffold T (%)',
+                'Scaffold N (%)',
+                'Scaffold non-ACGTN (%)',
+                'Number of scaffold non-ACGTN nt',
+                'GC content of scaffolds (%)',
+                'N50 of scaffolds',
+                'L50 of scaffolds',
+        ]
     if contigs_file is not None:
         order += [
                 # contigs
@@ -160,11 +177,32 @@ def post_process_result(scaffolds_file, contigs_file, result):
             print(o + ': ' + result[o])
     return result
 
+
 if __name__ == '__main__':
-    result_assemblathon = run_assemblathon_stats(args.scaffolds_file, args.contigs_file)
-    result_asm2stats = run_asm2stats(args.scaffolds_file)
-    result = {**result_assemblathon, **result_asm2stats}
-    result = post_process_result(args.scaffolds_file, args.contigs_file, result)
+    parser = argparse.ArgumentParser(
+        description='Calculate various assembly metrics')
+    parser.add_argument('-s', metavar='scaffolds_file',
+                        help='a fasta file of scaffolds (can be .gz)',
+                        nargs=1, default=None)
+    parser.add_argument('-c', metavar='contigs_file',
+                        help='a fasta file of contigs (can be .gz)',
+                        nargs=1, default=None)
+    parser.add_argument('-o', metavar='output_path',
+                        help='where a JSON output file will be generated at',
+                        nargs=1, default=None)
+    args = parser.parse_args()
+    scaffolds_file = args.s[0] if args.s is not None else None
+    contigs_file = args.c[0] if args.c is not None else None
+    if len(argv) == 1:
+        parser.print_help()
+        exit(1)
+    result_assemblathon = run_assemblathon_stats(scaffolds_file, contigs_file)
+    if scaffolds_file is not None:
+        result_asm2stats = run_asm2stats(scaffolds_file)
+        result = {**result_assemblathon, **result_asm2stats}
+    else:
+        result = result_assemblathon
+    result = post_process_result(scaffolds_file, contigs_file, result)
     if args.o:
         with open(args.o[0], 'w') as f:
             f.write(json.dumps(result, sort_keys=True, indent=4))
