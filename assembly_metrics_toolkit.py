@@ -35,6 +35,8 @@ def run_asm2stats(scaffolds_file):
     p = subprocess.run(['./asm2stats.minmaxgc.pl', scaffolds_file],
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        universal_newlines=True)
+    if p.stderr != '':
+        print(p.stderr)
     result = json.loads(p.stdout)
     return result
 
