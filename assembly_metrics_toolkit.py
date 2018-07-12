@@ -11,21 +11,29 @@ def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
         p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        universal_newlines=True)
+        if p.stderr != '':
+            print(p.stderr)
         result = process_assemblathon_stats(p.stdout, 'scaffolds-only')
     elif scaffolds_file is None:
         p = subprocess.run(['./assemblathon_stats.pl', contigs_file],
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        universal_newlines=True)
+        if p.stderr != '':
+            print(p.stderr)
         result = process_assemblathon_stats(p.stdout, 'contigs-only')
     else:
         p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        universal_newlines=True)
+        if p.stderr != '':
+            print(p.stderr)
         result_scaffolds = process_assemblathon_stats(p.stdout,
                                                       'scaffolds-only')
         p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        universal_newlines=True)
+        if p.stderr != '':
+            print(p.stderr)
         result_contigs = process_assemblathon_stats(p.stdout, 'contigs-only')
         result = {**result_scaffolds, **result_contigs}
     return result
