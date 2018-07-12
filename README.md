@@ -1,6 +1,7 @@
 ## Assembly Metrics Toolkit
 
 [![Build Status](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit.svg?branch=master)](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/485c473433484161a68b11ca734ef949)](https://www.codacy.com/app/hsiaoyi0504/Assembly_Metrics_Toolkit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hsiaoyi0504/Assembly_Metrics_Toolkit&amp;utm_campaign=Badge_Grade)
 
 ### Dependencies:
  * Perl
