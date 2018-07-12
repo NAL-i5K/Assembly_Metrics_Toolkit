@@ -1,5 +1,7 @@
 ## Assembly Metrics Toolkit
 
+[![Build Status](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit.svg?branch=master)](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit)
+
 ### Dependencies:
  * Perl
  * Python 3.5
