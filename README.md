@@ -45,7 +45,7 @@ python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffol
 python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz  -c ./sample_data/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz -o output_2.json
 ```
 
-These commands will generate two json files, which are the same as [example_scaffolds_only.json](example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example_scaffolds_and_contigs.json), respectively.
+These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.
 
 ## Acknowledgement
 
