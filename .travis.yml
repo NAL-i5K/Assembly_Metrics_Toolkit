@@ -8,6 +8,4 @@ script:
   - wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz
   - wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz
   - python ./assembly_metrics_toolkit.py -s Clec_Bbug02212013.genome.fa.gz -o output.json
-  - cat output.json
   - python ./assembly_metrics_toolkit.py -s Clec_Bbug02212013.genome.fa.gz -c ./Clec_Bbug02212013.contigs.fa.gz -o output.json
-  - cat output.json
