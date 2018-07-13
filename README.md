@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit.svg?branch=master)](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/485c473433484161a68b11ca734ef949)](https://www.codacy.com/app/hsiaoyi0504/Assembly_Metrics_Toolkit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hsiaoyi0504/Assembly_Metrics_Toolkit&amp;utm_campaign=Badge_Grade)
 
-## Prerequsite
+## Prerequisite
 
 * Perl
 * Python 3.5
@@ -46,6 +46,8 @@ python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffol
 ```
 
 These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.
+
+These json files can be further visualized through [Assembly_Metrics_Visualization](https://github.com/NAL-i5K/Assembly_Metrics_Visualization).
 
 ## Acknowledgement
 
