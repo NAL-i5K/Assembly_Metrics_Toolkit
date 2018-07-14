@@ -1,4 +1,5 @@
-#!/usr/bin/python3.5
+#!/usr/env/bin python
+from __future__ import print_function
 import argparse
 import subprocess
 from itertools import islice
@@ -6,46 +7,63 @@ import json
 from sys import argv, exit
 
 
+def merge_two_dicts(x, y):
+    """Given two dicts, merge them into a new dict as a shallow copy."""
+    z = x.copy()
+    z.update(y)
+    return z
+
+
 def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
     if contigs_file is None:
-        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                       universal_newlines=True)
-        if p.stderr != '':
-            print(p.stderr)
-        result = process_assemblathon_stats(p.stdout, 'scaffolds-only')
+        try:
+            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+                        stderr=subprocess.PIPE,
+                        universal_newlines=True)
+            result = process_assemblathon_stats(stdout, 'scaffolds-only')
+        except subprocess.CalledProcessError as e:
+            print(e.stderr)
+            raise
     elif scaffolds_file is None:
-        p = subprocess.run(['./assemblathon_stats.pl', contigs_file],
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                       universal_newlines=True)
-        if p.stderr != '':
-            print(p.stderr)
-        result = process_assemblathon_stats(p.stdout, 'contigs-only')
+        try:
+            stdout = subprocess.check_output(['./assemblathon_stats.pl', contigs_file],
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True)
+            result = process_assemblathon_stats(stdout, 'contigs-only')
+        except subprocess.CalledProcessError as e:
+            print(e.stderr)
+            raise
     else:
-        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        try:
+            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+                       stderr=subprocess.PIPE,
                        universal_newlines=True)
-        if p.stderr != '':
-            print(p.stderr)
-        result_scaffolds = process_assemblathon_stats(p.stdout,
-                                                      'scaffolds-only')
-        p = subprocess.run(['./assemblathon_stats.pl', scaffolds_file],
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                       universal_newlines=True)
-        if p.stderr != '':
-            print(p.stderr)
-        result_contigs = process_assemblathon_stats(p.stdout, 'contigs-only')
-        result = {**result_scaffolds, **result_contigs}
+        except subprocess.CalledProcessError as e:
+            print(e.stderr)
+            raise
+        try:
+            result_scaffolds = process_assemblathon_stats(stdout,
+                                                        'scaffolds-only')
+            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+                        stderr=subprocess.PIPE,
+                        universal_newlines=True)
+            result_contigs = process_assemblathon_stats(stdout, 'contigs-only')
+            result = merge_two_dicts(result_scaffolds, result_contigs)
+        except subprocess.CalledProcessError as e:
+            print(e.stderr)
+            raise
     return result
 
 
 def run_asm2stats(scaffolds_file):
-    p = subprocess.run(['./asm2stats.minmaxgc.pl', scaffolds_file],
-                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                       universal_newlines=True)
-    if p.stderr != '':
-        print(p.stderr)
-    result = json.loads(p.stdout)
+    try:
+        stdout = subprocess.check_output(['./asm2stats.minmaxgc.pl', scaffolds_file],
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True)
+        result = json.loads(stdout)
+    except subprocess.CalledProcessError as e:
+        print(e.stderr)
+        raise
     return result
 
 
@@ -209,7 +227,7 @@ if __name__ == '__main__':
     result_assemblathon = run_assemblathon_stats(scaffolds_file, contigs_file)
     if scaffolds_file is not None:
         result_asm2stats = run_asm2stats(scaffolds_file)
-        result = {**result_assemblathon, **result_asm2stats}
+        result = merge_two_dicts(result_assemblathon, result_asm2stats)
     else:
         result = result_assemblathon
     result = post_process_result(scaffolds_file, contigs_file, result)
