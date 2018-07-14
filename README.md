@@ -10,7 +10,7 @@
 
 ## Installation
 
-`cpanm install JSON`
+`cpanm --installdeps .`
 
 ## Usage
 
@@ -40,7 +40,7 @@ wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Cur
 
 ### Run the script
 
-```
+``` shell
 python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz -o output_1.json
 python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz  -c ./sample_data/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz -o output_2.json
 ```
@@ -51,5 +51,5 @@ These json files can be further visualized through [Assembly_Metrics_Visualizati
 
 ## Acknowledgement
 
- * `assemblathon_stats.pl` and `FAlite.pm` are from [ucdavis-bioinformatics/assemblathon2-analysis](https://github.com/ucdavis-bioinformatics/assemblathon2-analysis) GitHub Repo.
- * `asm2stats.minmaxgc.pl` is from [rjchallis/assembly-stats](https://github.com/rjchallis/assembly-stats) GitHub Repo, and is modified to also support `.gz` input fasta file.
+* `assemblathon_stats.pl` and `FAlite.pm` are from [ucdavis-bioinformatics/assemblathon2-analysis](https://github.com/ucdavis-bioinformatics/assemblathon2-analysis) GitHub Repo.
+* `asm2stats.minmaxgc.pl` is from [rjchallis/assembly-stats](https://github.com/rjchallis/assembly-stats) GitHub Repo, and is modified to also support `.gz` input fasta file.
