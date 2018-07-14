@@ -6,7 +6,7 @@
 ## Prerequisite
 
 * Perl
-* Python 3.5
+* Python 2.7 or 3.5
 
 ## Installation
 
@@ -15,7 +15,7 @@
 ## Usage
 
 ``` shell
-usage: python3.5 assembly_metrics_toolkit.py [-h] [-s scaffolds_file]
+usage: python assembly_metrics_toolkit.py [-h] [-s scaffolds_file]
 [-c contigs_file] [-o output_path]
 
 Calculate various assembly metrics
@@ -41,8 +41,8 @@ wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Cur
 ### Run the script
 
 ``` shell
-python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz -o output_1.json
-python3.5 ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz  -c ./sample_data/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz -o output_2.json
+python ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz -o output_1.json
+python ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz  -c ./sample_data/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz -o output_2.json
 ```
 
 These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.
