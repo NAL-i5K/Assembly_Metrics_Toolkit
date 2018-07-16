@@ -1,0 +1,37 @@
+image:
+    - Visual Studio 2013
+    - Visual Studio 2015
+    - Visual Studio 2017
+
+environment:
+  matrix:
+    - PYTHON: C:\Python27-x64
+    - PYTHON: C:\Python35-x64
+
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+
+# clone directory
+clone_folder: c:\projects\Assembly_Metrics_Toolkit
+
+platform: x64
+
+configuration: Release
+
+install:
+  - cd c:\projects\Assembly_Metrics_Toolkit
+  - cpan App::cpanminus
+  - cpanm --installdeps .
+
+build: off
+
+test_script:
+  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz'
+  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz'
+  - python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz -o output_1.json
+  - python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz  -c ./Clec_Bbug02212013.contigs.fa.gz -o output_2.json
+  - ps: Write-Host "Test scripts are finished ..."
+
+deploy: false

@@ -41,8 +41,8 @@ wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Cur
 ### Run the script
 
 ``` shell
-python ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz -o output_1.json
-python ./assembly_metrics_toolkit.py -s ./sample_data/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz  -c ./sample_data/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz -o output_2.json
+python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz -o output_1.json
+python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz  -c ./Clec_Bbug02212013.contigs.fa.gz -o output_2.json
 ```
 
 These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.

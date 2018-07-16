@@ -13,6 +13,7 @@ use warnings;
 use FAlite;
 use Getopt::Long;
 use List::Util qw(sum max min);
+use IO::Zlib;
 
 ###############################################
 # 
@@ -113,7 +114,8 @@ sub process_FASTA{
 	
 	# if dealing with gzip file, treat differently
 	if($seqs =~ m/\.gz$/){
-		open($input, "gunzip -c $seqs |") or die "Can't open a pipe to $seqs\n";
+		$input = new IO::Zlib;
+		$input->open($seqs, "rb") or die "Can't open a pipe to $seqs\n";
 	} else{
 		open($input, "<", "$seqs") or die "Can't open $seqs\n";
 	}
