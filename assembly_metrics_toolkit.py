@@ -17,7 +17,7 @@ def merge_two_dicts(x, y):
 def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
     if contigs_file is None:
         try:
-            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+            stdout = subprocess.check_output(['perl', 'assemblathon_stats.pl', scaffolds_file],
                         stderr=subprocess.STDOUT,
                         universal_newlines=True)
             result = process_assemblathon_stats(stdout, 'scaffolds-only')
@@ -26,7 +26,7 @@ def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
             raise
     elif scaffolds_file is None:
         try:
-            stdout = subprocess.check_output(['./assemblathon_stats.pl', contigs_file],
+            stdout = subprocess.check_output(['perl', 'assemblathon_stats.pl', contigs_file],
                     stderr=subprocess.STDOUT,
                     universal_newlines=True)
             result = process_assemblathon_stats(stdout, 'contigs-only')
@@ -35,7 +35,7 @@ def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
             raise
     else:
         try:
-            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+            stdout = subprocess.check_output(['perl', 'assemblathon_stats.pl', scaffolds_file],
                        stderr=subprocess.STDOUT,
                        universal_newlines=True)
         except subprocess.CalledProcessError as e:
@@ -44,7 +44,7 @@ def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
         try:
             result_scaffolds = process_assemblathon_stats(stdout,
                                                         'scaffolds-only')
-            stdout = subprocess.check_output(['./assemblathon_stats.pl', scaffolds_file],
+            stdout = subprocess.check_output(['perl', 'assemblathon_stats.pl', scaffolds_file],
                         stderr=subprocess.STDOUT,
                         universal_newlines=True)
             result_contigs = process_assemblathon_stats(stdout, 'contigs-only')
@@ -57,7 +57,7 @@ def run_assemblathon_stats(scaffolds_file=None, contigs_file=None):
 
 def run_asm2stats(scaffolds_file):
     try:
-        stdout = subprocess.check_output(['./asm2stats.minmaxgc.pl', scaffolds_file],
+        stdout = subprocess.check_output(['perl', 'asm2stats.minmaxgc.pl', scaffolds_file],
                     stderr=subprocess.STDOUT,
                     universal_newlines=True)
         result = json.loads(stdout)

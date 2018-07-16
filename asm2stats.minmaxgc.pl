@@ -3,13 +3,15 @@
 use strict;
 use List::Util qw(reduce);
 use JSON;
+use IO::Zlib;
 
 my $break = 10; # number of consecutive Ns to break scaffolds into contigs
 my $bins = 1000; # number of bins to place sequences into
 my ($file) = @ARGV;
 my $fh;
 if($file =~ m/\.gz$/){
-  open($fh, "gunzip -c $file |") or die "Can't open a pipe to $file\n";
+  $fh = new IO::Zlib;
+  $fh->open($file, "rb") or die "Can't open a pipe to $file\n";
 } else{
   open($fh, "<", "$file") or die "Can't open $file\n";
 }
