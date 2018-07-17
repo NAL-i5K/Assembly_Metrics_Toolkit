@@ -10,6 +10,8 @@
 
 use strict;
 use warnings;
+use FindBin;
+use lib "$FindBin::RealBin/.";
 use FAlite;
 use Getopt::Long;
 use List::Util qw(sum max min);
