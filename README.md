@@ -31,18 +31,18 @@ optional arguments:
 
 ### Download the example files
 
-We are using the scaffolds and contigs of *Cimex_lectularius* provided by [i5k Workspace@NAl](https://i5k.nal.usda.gov/Cimex_lectularius).
+We are using the scaffolds and contigs of *Agrilus planipennis* provided by [i5k Workspace@NAl](https://i5k.nal.usda.gov/Agrilus_planipennis).
 
 ``` shell
-wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Clec_Bbug02212013.contigs.fa.gz
-wget https://i5k.nal.usda.gov/data/Arthropoda/cimlec-%28Cimex_lectularius%29/Current%20Genome%20Assembly/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Clec_Bbug02212013.genome.fa.gz
+wget https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Aplan.contigs.80.fa.gz
+wget https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Aplan.scaffolds.50.fa.gz
 ```
 
 ### Run the script
 
 ``` shell
-python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz -o output_1.json
-python ./assembly_metrics_toolkit.py -s ./Clec_Bbug02212013.genome.fa.gz  -c ./Clec_Bbug02212013.contigs.fa.gz -o output_2.json
+python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz -o example_scaffolds_only.json
+python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz  -c ./Aplan.contigs.80.fa.gz -o example_scaffolds_and_contigs.json
 ```
 
 These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.
