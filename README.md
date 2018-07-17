@@ -1,6 +1,7 @@
 # Assembly Metrics Toolkit
 
 [![Build Status](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit.svg?branch=master)](https://travis-ci.org/NAL-i5K/Assembly_Metrics_Toolkit)
+[![Build status](https://ci.appveyor.com/api/projects/status/pnflujnpvf6v7ilj/branch/master?svg=true)](https://ci.appveyor.com/project/hsiaoyi0504/assembly-metrics-toolkit/branch/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/76c8df26e1bf4888833a95c616bbe99c)](https://www.codacy.com/app/NAL-i5K/Assembly_Metrics_Toolkit?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NAL-i5K/Assembly_Metrics_Toolkit&amp;utm_campaign=Badge_Grade)
 
 ## Prerequisite
