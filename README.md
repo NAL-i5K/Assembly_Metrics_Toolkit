@@ -32,18 +32,18 @@ optional arguments:
 
 ### Download the example files
 
-We are using the scaffolds and contigs of *Agrilus planipennis* provided by [i5k Workspace@NAl](https://i5k.nal.usda.gov/Agrilus_planipennis).
+We are using the scaffolds and contigs of *Athalia rosae* provided by [i5k Workspace@NAl](https://i5k.nal.usda.gov/Athalia_rosae).
 
 ``` shell
-wget https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Aplan.contigs.80.fa.gz
-wget https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Aplan.scaffolds.50.fa.gz
+wget "https://i5k.nal.usda.gov/data/Arthropoda/athros-(Athalia_rosae)/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Aros01112013-contigs.fa.gz"
+wget "https://i5k.nal.usda.gov/data/Arthropoda/athros-(Athalia_rosae)/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Aros01112013-genome.fa.gz"
 ```
 
 ### Run the script
 
 ``` shell
-python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz -o example_scaffolds_only.json
-python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz  -c ./Aplan.contigs.80.fa.gz -o example_scaffolds_and_contigs.json
+python ./assembly_metrics_toolkit.py -s ./Aros01112013-genome.fa.gz -o example_scaffolds_only.json
+python ./assembly_metrics_toolkit.py -s ./Aros01112013-genome.fa.gz -c ./Aros01112013-contigs.fa.gz -o example_scaffolds_and_contigs.json
 ```
 
 These commands will generate two json files, which are the same as [example_scaffolds_only.json](example/example_scaffolds_only.json) and [example_scaffolds_and_contigs.json](example/example_scaffolds_and_contigs.json), respectively.
