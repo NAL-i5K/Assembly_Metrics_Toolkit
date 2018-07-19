@@ -28,10 +28,10 @@ install:
 build: off
 
 test_script:
-  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Aplan.contigs.80.fa.gz'
-  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/sites/default/files/data/Arthropoda/agrpla-%28Agrilus_planipennis%29/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Aplan.scaffolds.50.fa.gz'
-  - python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz -o example_scaffolds_only.json
-  - python ./assembly_metrics_toolkit.py -s ./Aplan.scaffolds.50.fa.gz  -c ./Aplan.contigs.80.fa.gz -o example_scaffolds_and_contigs.json
+  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/data/Arthropoda/athros-(Athalia_rosae)/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Contigs/Aros01112013-contigs.fa.gz'
+  - ps: Start-FileDownload 'https://i5k.nal.usda.gov/data/Arthropoda/athros-(Athalia_rosae)/BCM-After-Atlas/1.Genome%20Assembly/BCM-After-Atlas/Scaffolds/Aros01112013-genome.fa.gz'
+  - python ./assembly_metrics_toolkit.py -s ./Aros01112013-genome.fa.gz -o example_scaffolds_only.json
+  - python ./assembly_metrics_toolkit.py -s ./Aros01112013-genome.fa.gz -c ./Aros01112013-contigs.fa.gz -o example_scaffolds_and_contigs.json
   - ps: Write-Host "Test scripts are finished ..."
 
 deploy: false
