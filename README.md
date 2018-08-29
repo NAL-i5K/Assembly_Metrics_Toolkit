@@ -7,6 +7,7 @@
 ## Prerequisite
 
 * Perl
+  * Cpanm
 * Python 2.7 or 3.5
 
 ## Installation
